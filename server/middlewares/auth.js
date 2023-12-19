@@ -44,21 +44,28 @@ exports.auth = async (req, res, next) => {
 };
 exports.isStudent = async (req, res, next) => {
 	try {
+		console.log('req.user:', req.user); // Log the entire req.user object
 		const userDetails = await User.findOne({ email: req.user.email });
 
-		if (userDetails.accountType !== "Student") {
+		if (!userDetails || userDetails.accountType !== "Student") {
 			return res.status(401).json({
 				success: false,
 				message: "This is a Protected Route for Students",
 			});
 		}
+
 		next();
 	} catch (error) {
-		return res
-			.status(500)
-			.json({ success: false, message: `User Role Can't be Verified` });
+		return res.status(500).json({
+			success: false,
+			message: `User Role Can't be Verified`,
+			error: error.message,
+		});
 	}
 };
+
+
+
 exports.isAdmin = async (req, res, next) => {
 	try {
 		const userDetails = await User.findOne({ email: req.user.email });

@@ -82,15 +82,23 @@ exports.categoryPageDetails = async (req, res) => {
     const categoriesExceptSelected = await Category.find({
       _id: { $ne: categoryId },
     })
-    let differentCategory = await Category.findOne(
-      categoriesExceptSelected[getRandomInt(categoriesExceptSelected.length)]._id)
-      .populate({
-        path: "courses",
-        match: { status: "Published" },
-      })
-      .exec()
-    console.log("Different COURSE", differentCategory)
+    const randomIndex = getRandomInt(categoriesExceptSelected.length);
+    const randomCategory = categoriesExceptSelected[randomIndex];
+    // if (randomCategory) {
+    //   let differentCategory = await Category.findById(randomCategory._id)
+    //     .populate({
+    //       path: "courses",
+    //       match: { status: "Published" },
+    //     })
+    //     .exec();
+    //   // Rest of your code handling differentCategory
+    // } else {
+    //   console.log("No categories found except the selected one.");
+    //   // Handle the case when no other categories are available
+    // }
+
     // Get top-selling courses across all categories
+
     const allCategories = await Category.find()
       .populate({
         path: "courses",
@@ -109,7 +117,6 @@ exports.categoryPageDetails = async (req, res) => {
       success: true,
       data: {
         selectedCategory,
-        differentCategory,
         mostSellingCourses,
       },
     })

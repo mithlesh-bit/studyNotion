@@ -13,6 +13,7 @@ const CourseProgress = require("../models/CourseProgress")
 // Capture the payment and initiate the Razorpay order
 exports.capturePayment = async (req, res) => {
   const { courses } = req.body
+  console.log(111, courses);
   const userId = req.user.id
   if (courses.length === 0) {
     return res.json({ success: false, message: "Please Provide Course ID" })
@@ -34,12 +35,12 @@ exports.capturePayment = async (req, res) => {
       }
 
       // Check if the user is already enrolled in the course
-      const uid = new mongoose.Types.ObjectId(userId)
-      if (course.studentsEnroled.includes(uid)) {
-        return res
-          .status(200)
-          .json({ success: false, message: "Student is already Enrolled" })
-      }
+      // const uid = new mongoose.Types.ObjectId(userId)
+      // if (course.studentsEnroled.includes(uid)) {
+      //   return res
+      //     .status(200)
+      //     .json({ success: false, message: "Student is already Enrolled" })
+      // }
 
       // Add the price of the course to the total amount
       total_amount += course.price
